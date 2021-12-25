@@ -1,23 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:timetable/models/user.dart';
 
-abstract class AuthState extends Equatable {
-  const AuthState();
+class AuthState extends Equatable {
+  final User? user;
 
-  @override
-  List<Object?> get props => [];
-}
+  const AuthState.unauthorized() : user = null;
 
-class AuthAuthenticated extends AuthState {
-  final String token;
+  const AuthState.authenticated(this.user);
 
-  const AuthAuthenticated({
-    required this.token,
-  });
+  bool get isAuthenticated => user != null;
 
   @override
-  List<Object?> get props => [token];
-}
-
-class AuthUnauthorized extends AuthState {
-  const AuthUnauthorized();
+  List<Object?> get props => [user];
 }
