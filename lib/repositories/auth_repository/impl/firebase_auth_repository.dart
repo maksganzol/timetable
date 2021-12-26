@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:timetable/dependency_injector/dependency_injector.dart';
 import 'package:timetable/models/user.dart';
 import 'package:timetable/repositories/auth_repository/auth_repository.dart';
 import '../extensions/firebase_user_to_user_model.dart';
 
 class FirebaseAuthRepository extends AuthRepository {
-  final FirebaseAuth _firebaseAuth;
-
-  FirebaseAuthRepository(this._firebaseAuth);
+  final FirebaseAuth _firebaseAuth = DI.locator<FirebaseAuth>();
 
   @override
   Future<User?> signInAnonymously() async {

@@ -16,9 +16,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _handleLogin(AuthLogin event, Emitter emit) async {
     final user = await _authRepository.signInAnonymously();
-    if (user != null) {
-      emit(AuthState.authenticated(user));
-    }
+    if (user == null) return;
+    emit(AuthState.authenticated(user));
   }
 
   Future<void> _handleLogout(AuthLogout event, Emitter emit) async {
@@ -27,6 +26,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _handleInit(AuthInit event, Emitter emit) {
+    final currentUser = _authRepository.currentUser;
+    if (currentUser == null) {
+      add(const AuthLogin());
+      return;
+    }
     emit(AuthState.authenticated(_authRepository.currentUser));
   }
 }

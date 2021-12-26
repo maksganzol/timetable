@@ -1,3 +1,3 @@
-export 'package:timetable/blocs/auth_bloc/bloc.dart';
-export 'package:timetable/blocs/auth_bloc/auth_state.dart';
-export 'package:timetable/blocs/auth_bloc/auth_event.dart';
+export 'bloc.dart';
+export 'auth_state.dart';
+export 'auth_event.dart';
