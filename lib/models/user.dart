@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:timetable/utils/type_defs/json.dart';
 
 part 'user.g.dart';
 
@@ -16,7 +17,7 @@ class User extends Equatable {
   @override
   List<Object?> get props => [id, displayName];
 
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  Json toJson() => _$UserToJson(this);
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(Json json) => _$UserFromJson(json);
 }

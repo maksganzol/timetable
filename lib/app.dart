@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetable/blocs/auth_bloc/auth_bloc.dart';
 import 'package:timetable/blocs/timetable_bloc/bloc.dart';
+import 'package:timetable/blocs/timetable_details_bloc/timetable_details_bloc.dart';
 import 'package:timetable/dependency_injector/dependency_injector.dart';
 import 'package:timetable/router/router.dart';
 
@@ -11,6 +12,9 @@ class App extends StatelessWidget {
   List<BlocProvider> get _blocProviders => [
         BlocProvider<AuthBloc>(create: (_) => AuthBloc()),
         BlocProvider<TimetableBloc>(create: (_) => TimetableBloc()),
+        BlocProvider<TimetableDetailsBloc>(
+          create: (_) => TimetableDetailsBloc(),
+        ),
       ];
 
   @override
