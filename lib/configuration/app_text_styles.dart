@@ -19,6 +19,11 @@ abstract class AppTexStyles {
     fontWeight: FontWeight.w400,
   );
 
+  static final TextStyle b800 = textStyle.copyWith(
+    fontSize: 20,
+    fontWeight: FontWeight.w100,
+  );
+
   static final TextStyle h100 = textStyle.copyWith(
     fontSize: 20,
     fontWeight: FontWeight.w500,
