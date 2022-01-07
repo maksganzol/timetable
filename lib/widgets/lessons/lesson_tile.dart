@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:timetable/configuration/app_text_styles.dart';
 import 'package:timetable/configuration/configuration.dart';
+import 'package:timetable/models/lesson_time.dart';
 
 class LessonTile extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  final DateTime startTime;
-  final DateTime endTime;
+  final LessonTime startTime;
+  final LessonTime endTime;
 
   final bool isActive;
 
@@ -47,7 +47,7 @@ class LessonTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _LessonTimeLabel(time: startTime),
+          _LessonTimeLabel(time: startTime.toDateTime()),
           Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +62,7 @@ class LessonTile extends StatelessWidget {
               ),
             ],
           ),
-          _LessonTimeLabel(time: endTime),
+          _LessonTimeLabel(time: endTime.toDateTime()),
         ],
       ),
     );
@@ -88,6 +88,6 @@ class _LessonTimeLabel extends StatelessWidget {
 
 extension _TimeFormat on DateTime {
   String get timeString {
-    return DateFormat('hh:mm').format(this);
+    return DateFormat('hh:mm').format(toLocal());
   }
 }

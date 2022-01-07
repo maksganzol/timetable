@@ -1,31 +1,21 @@
-import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:timetable/models/extensions/timestamp_to_date_time.dart';
 import 'package:timetable/utils/type_defs/json.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'lesson_time.g.dart';
 
 @JsonSerializable()
-class LessonTime extends Equatable {
-  @JsonKey(fromJson: TimestampToDateTime.fromJson)
-  final DateTime startTime;
-  @JsonKey(fromJson: TimestampToDateTime.fromJson)
-  final DateTime endTime;
-  final int dayOfWeek;
-  final bool? isOddWeek;
+class LessonTime {
+  final int hours;
+  final int minutes;
 
   const LessonTime({
-    required this.startTime,
-    required this.endTime,
-    required this.dayOfWeek,
-    required this.isOddWeek,
+    required this.hours,
+    this.minutes = 0,
   });
 
   factory LessonTime.fromJson(Json json) => _$LessonTimeFromJson(json);
 
   Json toJson() => _$LessonTimeToJson(this);
 
-  @override
-  List<Object?> get props => [startTime, endTime, dayOfWeek, isOddWeek];
+  DateTime toDateTime() => DateTime(0, 0, 0, hours, minutes);
 }

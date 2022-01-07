@@ -5,6 +5,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:timetable/configuration/app_margings.dart';
 import 'package:timetable/models/extensions/day_of_week_display_name.dart';
 import 'package:timetable/models/lesson.dart';
+import 'package:timetable/models/lesson_status.dart';
 import 'package:timetable/widgets/lessons/lesson_tile.dart';
 
 class LessonsList extends StatelessWidget {
@@ -59,7 +60,7 @@ class LessonsList extends StatelessWidget {
         final lesson = lessonsForDay[lessonIndex];
 
         return LessonTile(
-          isActive: dayIndex == 0 && lessonIndex == 1,
+          isActive: lesson.status == LessonStatus.started,
           title: lesson.description ?? '',
           subtitle: lesson.teacher?.displayName ?? '',
           startTime: lesson.time.startTime,

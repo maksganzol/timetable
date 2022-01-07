@@ -32,6 +32,7 @@ class _TimetablePageState extends State<TimetablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CupertinoNavigationBar(
+        previousPageTitle: 'Расписания',
         trailing: Material(
           child: IconButton(
             onPressed: () => setState(() => viewMode = viewMode.inverted),
@@ -40,7 +41,7 @@ class _TimetablePageState extends State<TimetablePage> {
         ),
         middle: BlocBuilder<TimetableDetailsBloc, TimetableDetailsState>(
           builder: (context, state) {
-            final title = state.timetableDetails?.title ?? 'Loading...';
+            final title = state.timetableDetails?.title ?? '...';
             return Text(title, style: const TextStyle(fontSize: 20));
           },
         ),
@@ -67,9 +68,7 @@ class _TimetablePageState extends State<TimetablePage> {
         builder: (context, state) {
           final lessons = state.timetableDetails?.lessons;
           if (lessons == null) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
           return LessonsList(lessons: lessons);
         },

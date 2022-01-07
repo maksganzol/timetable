@@ -30,21 +30,11 @@ class _HomePageState extends State<HomePage> {
       body: NestedScrollView(
         headerSliverBuilder: (context, _) => [
           const CupertinoSliverNavigationBar(
-            backgroundColor: AppColors.creamPink,
-            leading: Icon(
-              CupertinoIcons.calendar,
-              color: Colors.white,
-            ),
             largeTitle: Text(
-              'Мои расписания',
+              'Расписания',
               style: TextStyle(
-                color: Colors.white,
                 fontWeight: FontWeight.w400,
               ),
-            ),
-            trailing: Icon(
-              Icons.settings,
-              color: Colors.white,
             ),
           ),
         ],
