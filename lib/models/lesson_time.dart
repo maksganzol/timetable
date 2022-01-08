@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:timetable/utils/type_defs/json.dart';
 
@@ -14,6 +16,18 @@ class LessonTime {
   });
 
   factory LessonTime.fromJson(Json json) => _$LessonTimeFromJson(json);
+
+  factory LessonTime.fromDate(DateTime dateTime) => LessonTime(
+        hours: dateTime.hour,
+        minutes: dateTime.minute,
+      );
+
+  factory LessonTime.fromTimeOfDay(TimeOfDay timeOfDay) => LessonTime(
+        hours: timeOfDay.hour,
+        minutes: timeOfDay.minute,
+      );
+
+  String get formatted => DateFormat('hh:mm').format(toDateTime());
 
   Json toJson() => _$LessonTimeToJson(this);
 

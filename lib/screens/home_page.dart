@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetable/blocs/timetable_bloc/timetable_bloc.dart';
-import 'package:timetable/configuration/configuration.dart';
 import 'package:timetable/models/timetable.dart';
 import 'package:timetable/models/timetable_color.dart';
 import 'package:timetable/router/router.dart';
@@ -38,12 +37,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-        body: Container(
-          color: AppColors.creamPink.withOpacity(0.05),
-          child: BlocBuilder<TimetableBloc, TimetableState>(
-            builder: (context, state) => _TimetableList(
-              timetables: state.timetables,
-            ),
+        body: BlocBuilder<TimetableBloc, TimetableState>(
+          builder: (context, state) => _TimetableList(
+            timetables: state.timetables,
           ),
         ),
       ),

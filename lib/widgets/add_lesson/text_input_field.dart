@@ -3,25 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:timetable/configuration/app_text_styles.dart';
 
 class TextInputField extends StatelessWidget {
-  const TextInputField({Key? key}) : super(key: key);
+  const TextInputField({
+    Key? key,
+    this.controller,
+    this.onChanged,
+    this.hintText,
+  }) : super(key: key);
+
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: onChanged,
       cursorHeight: 20,
+      controller: controller,
       style: AppTexStyles.b800,
-      decoration: const InputDecoration(
-        enabledBorder: UnderlineInputBorder(
+      decoration: InputDecoration(
+        hintText: hintText,
+        enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: CupertinoColors.systemGrey,
           ),
         ),
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: CupertinoColors.systemBlue,
           ),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10),
         isDense: true,
       ),
     );
