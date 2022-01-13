@@ -1,14 +1,22 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:timetable/utils/type_defs/json.dart';
-import 'package:timetable/models/lesson_time.dart';
+import 'package:timetable/models/extensions/time_of_day_serializable.dart';
 
 part 'lesson_schedule.g.dart';
 
+const startTimeKey = JsonKey(
+  fromJson: TimeOfDaySerializable.fromJson,
+  toJson: TimeOfDaySerializable.toJson,
+);
+
 @JsonSerializable()
 class LessonSchedule extends Equatable {
-  final LessonTime startTime;
-  final LessonTime endTime;
+  @startTimeKey
+  final TimeOfDay startTime;
+  @startTimeKey
+  final TimeOfDay endTime;
   final int dayOfWeek;
   final bool? isOddWeek;
 

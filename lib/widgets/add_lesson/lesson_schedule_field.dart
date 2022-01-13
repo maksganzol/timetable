@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:timetable/blocs/add_lesson_bloc/add_lesson_bloc.dart';
 import 'package:timetable/models/extensions/day_of_week_display_name.dart';
 import 'package:timetable/models/lesson_schedule.dart';
-import 'package:timetable/models/lesson_time.dart';
+import 'package:timetable/widgets/add_lesson/value_alert_dialog.dart';
 
 class LessonScheduleFiled extends StatelessWidget {
   const LessonScheduleFiled({
@@ -19,29 +17,7 @@ class LessonScheduleFiled extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () async {
-        final startTime = await showTimePicker(
-          helpText: 'Выберите время начала',
-          context: context,
-          initialTime: TimeOfDay.fromDateTime(value.startTime.toDateTime()),
-        );
-        if (startTime == null) return;
-
-        final endTime = await showTimePicker(
-          helpText: 'Выберите время окончания',
-          context: context,
-          initialTime: TimeOfDay.fromDateTime(value.endTime.toDateTime()),
-        );
-        if (endTime == null) return;
-        final lessonSchedule = LessonSchedule(
-          startTime: LessonTime.fromTimeOfDay(startTime),
-          endTime: LessonTime.fromTimeOfDay(endTime),
-          dayOfWeek: 0,
-          isOddWeek: false,
-        );
-
-        onChanged(lessonSchedule);
-      },
+      onTap: () => _handleTimePicker(context),
       leading: const Padding(
         padding: EdgeInsets.only(top: 5),
         child: Icon(CupertinoIcons.clock),
@@ -55,11 +31,62 @@ class LessonScheduleFiled extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _handleTimePicker(BuildContext context) async {
+    final startTime = await showTimePicker(
+      helpText: 'Выберите время начала',
+      context: context,
+      initialTime: value.startTime,
+    );
+    if (startTime == null) return;
+
+    final endTime = await showTimePicker(
+      helpText: 'Выберите время окончания',
+      context: context,
+      initialTime: value.endTime,
+    );
+    if (endTime == null) return;
+
+    //TODO process period
+    await ValueAlertDialog.show<int>(context, builder: _alertDialogBuilder);
+
+    final lessonSchedule = LessonSchedule(
+      startTime: startTime,
+      endTime: endTime,
+      dayOfWeek: DateTime.now().weekday - 1,
+      isOddWeek: false,
+    );
+
+    onChanged(lessonSchedule);
+  }
+
+  Widget _alertDialogBuilder(BuildContext context, ValueSetter<int> resolve) {
+    return AlertDialog(
+      title: const Align(
+        alignment: Alignment.center,
+        child: Text('Период'),
+      ),
+      actions: [
+        TextButton(
+          child: const Text('Каждый день'),
+          onPressed: () => resolve(1),
+        ),
+        TextButton(
+          child: const Text('Неделю'),
+          onPressed: () => resolve(2),
+        ),
+        TextButton(
+          child: const Text('2 недели'),
+          onPressed: () => resolve(3),
+        ),
+      ],
+    );
+  }
 }
 
 class _LessonTimeLabel extends StatelessWidget {
-  final LessonTime startTime;
-  final LessonTime endTime;
+  final TimeOfDay startTime;
+  final TimeOfDay endTime;
 
   const _LessonTimeLabel({
     Key? key,
@@ -69,7 +96,7 @@ class _LessonTimeLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('${startTime.formatted} - ${endTime.formatted}');
+    return Text('${startTime.format(context)} - ${endTime.format(context)}');
   }
 }
 

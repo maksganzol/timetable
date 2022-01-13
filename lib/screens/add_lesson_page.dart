@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
 import 'package:timetable/blocs/add_lesson_bloc/add_lesson_bloc.dart';
+import 'package:timetable/blocs/timetable_details_bloc/timetable_details_bloc.dart';
 import 'package:timetable/configuration/app_margings.dart';
 import 'package:timetable/utils/extensions/iterable_join_with.dart';
 import 'package:timetable/widgets/add_lesson/input_wrapper.dart';
@@ -38,25 +38,56 @@ class _AddLessonPageState extends State<AddLessonPage> {
           onTap: () => AutoRouter.of(context).pop(),
         ),
         middle: const Text('Добавить урок'),
-        trailing: GestureDetector(
-          onTap: () => AutoRouter.of(context).pop(),
-          child: const Text(
-            'Готово',
-            style: TextStyle(color: CupertinoColors.systemGreen),
-          ),
-        ),
+        trailing: const _AddLessonButton(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppMargins.margin),
         child: ListView(
           children: const [
             _DescriptionField(),
+            _LessonSchedulePicker(),
             _TeacherField(),
-            _LessonSchedulePicker()
           ].joinWith(const SizedBox(height: AppMargins.largeMargin)),
         ),
       ),
     );
+  }
+}
+
+class _AddLessonButton extends StatelessWidget {
+  const _AddLessonButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => AutoRouter.of(context).pop(),
+      child: GestureDetector(
+        onTap: () => _handleAddLesson(context),
+        child: BlocBuilder<AddLessonBloc, AddLessonState>(
+          builder: (context, state) => Text(
+            'Готово',
+            style: TextStyle(
+              color: state.isFormValid
+                  ? CupertinoColors.systemGreen
+                  : CupertinoColors.systemGrey,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleAddLesson(BuildContext context) {
+    final timetableDetailsBloc = context.read<TimetableDetailsBloc>();
+    final addLessonBloc = context.read<AddLessonBloc>();
+    final timetableId = timetableDetailsBloc.state.timetableDetails?.id;
+
+    if (timetableId == null) return;
+
+    addLessonBloc.add(AddLessonSubmit(timetableId: timetableId));
+    timetableDetailsBloc.add(TimetableDetailsLoad(timetableId: timetableId));
+
+    AutoRouter.of(context).pop();
   }
 }
 

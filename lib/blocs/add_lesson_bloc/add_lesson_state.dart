@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:timetable/blocs/add_lesson_bloc/add_lesson_request_factory.dart';
+import 'package:timetable/models/add_lesson_request.dart';
 import 'package:timetable/models/lesson_schedule.dart';
-import 'package:timetable/models/lesson_time.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:timetable/models/teacher.dart';
 
 part 'add_lesson_state.g.dart';
 
@@ -29,12 +32,33 @@ class AddLessonState extends Equatable {
         teacherSurname = null,
         _lessonSchedule = null;
 
+  AddLessonRequest? addLessonRequest(String timetableId) =>
+      AddLessonRequestFactory.create(
+        description: description,
+        teacher: _teacher,
+        lessonSchedule: lessonSchedule,
+        timetableId: timetableId,
+      );
+
+  bool get isFormValid => AddLessonRequestFactory.validate(
+        description: description,
+        teacher: _teacher,
+      );
+
+  Teacher? get _teacher {
+    final name = teacherName;
+    final surname = teacherSurname;
+    final patro = teacherPatro;
+    if (name == null || surname == null || patro == null) return null;
+    return Teacher(surname: surname, name: name, patro: patro);
+  }
+
   LessonSchedule get _scheduleNow {
     final now = DateTime.now();
 
     return LessonSchedule(
-      startTime: LessonTime.fromDate(now),
-      endTime: LessonTime.fromDate(now.add(const Duration(hours: 1))),
+      startTime: TimeOfDay.fromDateTime(now),
+      endTime: TimeOfDay.fromDateTime(now.add(const Duration(hours: 1))),
       dayOfWeek: now.weekday,
       isOddWeek: false,
     );

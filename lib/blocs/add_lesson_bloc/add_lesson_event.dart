@@ -44,3 +44,12 @@ class AddLessonSchedule extends AddLessonEvent {
   @override
   List<Object?> get props => [lessonSchedule];
 }
+
+class AddLessonSubmit extends AddLessonEvent {
+  final String timetableId;
+
+  const AddLessonSubmit({required this.timetableId});
+
+  @override
+  List<Object?> get props => [timetableId];
+}

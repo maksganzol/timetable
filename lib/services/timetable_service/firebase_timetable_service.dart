@@ -16,10 +16,7 @@ class FirebaseTimetableService {
 
   Future<List<Timetable>> fetchTimetableCollection() async {
     final querySnapshot = await _collection.get();
-
-    final timetables = querySnapshot.docs.toModels(Timetable.fromJson);
-
-    return timetables;
+    return querySnapshot.docs.toModels(Timetable.fromJson);
   }
 
   Future<Timetable?> fetchTimetableById({required String id}) async {
@@ -40,5 +37,12 @@ class FirebaseTimetableService {
         .get();
 
     return querySnapshot.docs.toModels(Lesson.fromJson);
+  }
+
+  Future<void> addLessonToTimetable(String timetableId, Json lessonData) async {
+    await _collection
+        .doc(timetableId)
+        .collection(_lessonsCollectionName)
+        .add(lessonData);
   }
 }

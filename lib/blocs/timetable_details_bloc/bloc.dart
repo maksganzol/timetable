@@ -13,8 +13,10 @@ class TimetableDetailsBloc
     on<TimetableDetailsLoad>(_handleLoad);
   }
 
-  Future<void> _handleLoad(TimetableDetailsLoad event,
-      Emitter<TimetableDetailsState> emitter) async {
+  Future<void> _handleLoad(
+    TimetableDetailsLoad event,
+    Emitter<TimetableDetailsState> emitter,
+  ) async {
     if (event.timetableId != state.timetableDetails?.id) {
       emitter(const TimetableDetailsState.initial());
     }
