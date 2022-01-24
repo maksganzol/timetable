@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
+
 import 'package:timetable/utils/type_defs/json.dart';
 import 'package:timetable/models/extensions/time_of_day_serializable.dart';
 
@@ -11,6 +13,7 @@ const startTimeKey = JsonKey(
   toJson: TimeOfDaySerializable.toJson,
 );
 
+@CopyWith()
 @JsonSerializable()
 class LessonSchedule extends Equatable {
   @startTimeKey

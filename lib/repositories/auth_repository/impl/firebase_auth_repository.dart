@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:timetable/dependency_injector/dependency_injector.dart';
 import 'package:timetable/models/user.dart';
+import 'package:timetable/repositories/auth_repository/auth_confirmation_result.dart';
 import 'package:timetable/repositories/auth_repository/auth_repository.dart';
+import 'package:timetable/repositories/auth_repository/impl/firebase_auth_confirmation_result.dart';
 import '../extensions/firebase_user_to_user_model.dart';
 
 class FirebaseAuthRepository extends AuthRepository {
@@ -20,4 +24,23 @@ class FirebaseAuthRepository extends AuthRepository {
 
   @override
   User? get currentUser => _firebaseAuth.currentUser?.model;
+
+  @override
+  Future<AuthConfirmationResult> signInWithPhone({
+    required String phoneNumber,
+  }) async {
+    final completer = Completer<AuthConfirmationResult>();
+    await _firebaseAuth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      codeSent: (verificationId, forceResendingToken) => completer.complete(
+        FirebaseAuthConfirmationResult(verificationId),
+      ),
+      verificationCompleted: (_) {},
+      verificationFailed: (error) {
+        print('AAAAAAAAAA $error');
+      },
+      codeAutoRetrievalTimeout: (_) {},
+    );
+    return completer.future;
+  }
 }

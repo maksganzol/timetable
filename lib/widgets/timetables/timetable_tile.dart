@@ -23,7 +23,15 @@ class TimetableTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(AppMargins.margin),
         decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.indigo050,
+              blurRadius: 10,
+              offset: Offset(3, 0),
+            )
+          ],
           border: Border(left: BorderSide(color: color, width: 3)),
+          color: AppColors.white,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -2,7 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:timetable/blocs/auth_bloc/auth_bloc.dart';
 import 'package:timetable/blocs/timetable_bloc/timetable_bloc.dart';
+import 'package:timetable/blocs/utils/wait_for_state.dart';
+import 'package:timetable/configuration/app_colors.dart';
+import 'package:timetable/configuration/configuration.dart';
 import 'package:timetable/models/timetable.dart';
 import 'package:timetable/models/timetable_color.dart';
 import 'package:timetable/router/router.dart';
@@ -26,14 +30,24 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.indigoBackground,
       body: NestedScrollView(
         headerSliverBuilder: (context, _) => [
-          const CupertinoSliverNavigationBar(
-            largeTitle: Text(
+          CupertinoSliverNavigationBar(
+            backgroundColor: AppColors.indigoBackground,
+            automaticallyImplyLeading: false,
+            border: const Border(),
+            largeTitle: const Text(
               'Расписания',
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-              ),
+            ),
+            trailing: GestureDetector(
+              onTap: () async {
+                final authBloc = context.read<AuthBloc>();
+                authBloc.add(const AuthLogout());
+                await authBloc.waitFor((state) => !state.isAuthenticated);
+                context.router.replace(const SigninRoute());
+              },
+              child: const Icon(Icons.logout_outlined),
             ),
           ),
         ],

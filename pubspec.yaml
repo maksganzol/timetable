@@ -25,6 +25,8 @@ dependencies:
   flutter_slidable: 1.2.0
   modal_bottom_sheet:
   copy_with_extension_gen: 4.0.0
+  pin_code_fields: ^7.3.0
+  weekday_selector: ^1.0.0
 
   # Firebase
   firebase_core: 1.10.6
@@ -42,3 +44,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/json/

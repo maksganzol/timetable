@@ -5,11 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:timetable/blocs/add_lesson_bloc/add_lesson_bloc.dart';
 import 'package:timetable/blocs/timetable_details_bloc/timetable_details_bloc.dart';
+import 'package:timetable/configuration/app_colors.dart';
 import 'package:timetable/configuration/app_margings.dart';
+import 'package:timetable/models/lesson_schedule.dart';
+
 import 'package:timetable/utils/extensions/iterable_join_with.dart';
 import 'package:timetable/widgets/add_lesson/input_wrapper.dart';
 import 'package:timetable/widgets/add_lesson/lesson_schedule_field.dart';
 import 'package:timetable/widgets/add_lesson/text_input_field.dart';
+import 'package:timetable/widgets/add_lesson/weekday_picker.dart';
 
 class AddLessonPage extends StatefulWidget {
   const AddLessonPage({Key? key}) : super(key: key);
@@ -28,26 +32,22 @@ class AddLessonPage extends StatefulWidget {
 class _AddLessonPageState extends State<AddLessonPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CupertinoNavigationBar(
-        leading: GestureDetector(
-          child: const Icon(
-            CupertinoIcons.xmark_circle,
-            color: CupertinoColors.destructiveRed,
-          ),
-          onTap: () => AutoRouter.of(context).pop(),
+    return BlocBuilder<TimetableDetailsBloc, TimetableDetailsState>(
+      builder: (context, state) => Scaffold(
+        appBar: CupertinoNavigationBar(
+          previousPageTitle: state.timetableDetails?.title ?? '...',
+          middle: const Text('Добавить урок'),
+          trailing: const _AddLessonButton(),
         ),
-        middle: const Text('Добавить урок'),
-        trailing: const _AddLessonButton(),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(AppMargins.margin),
-        child: ListView(
-          children: const [
-            _DescriptionField(),
-            _LessonSchedulePicker(),
-            _TeacherField(),
-          ].joinWith(const SizedBox(height: AppMargins.largeMargin)),
+        body: Padding(
+          padding: const EdgeInsets.all(AppMargins.margin),
+          child: ListView(
+            children: const [
+              _DescriptionField(),
+              _LessonSchedulePicker(),
+              _TeacherField(),
+            ].joinWith(const SizedBox(height: AppMargins.largeMargin)),
+          ),
         ),
       ),
     );
@@ -150,12 +150,26 @@ class _LessonSchedulePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddLessonBloc, AddLessonState>(
-      builder: (context, state) => LessonScheduleFiled(
-        onChanged: (lessonSchedule) => context
-            .read<AddLessonBloc>()
-            .add(AddLessonSchedule(lessonSchedule)),
-        value: state.lessonSchedule,
-      ),
+      builder: (context, state) {
+        return Column(
+          children: [
+            LessonScheduleFiled(
+              onChanged: (lessonSchedule) => context
+                  .read<AddLessonBloc>()
+                  .add(AddLessonSchedule(lessonSchedule)),
+              value: state.lessonSchedule,
+            ),
+            WeekdayPicker(
+              onChanged: (dayOfWeek) => context.read<AddLessonBloc>().add(
+                    AddLessonSchedule(
+                      state.lessonSchedule.copyWith.dayOfWeek(dayOfWeek),
+                    ),
+                  ),
+              selectedDay: state.lessonSchedule.dayOfWeek,
+            ),
+          ],
+        );
+      },
     );
   }
 }

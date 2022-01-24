@@ -7,10 +7,11 @@ abstract class AuthEvent extends Equatable {
 }
 
 class AuthLogin extends AuthEvent {
-  const AuthLogin();
+  final String phone;
+  const AuthLogin(this.phone);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [phone];
 }
 
 class AuthLogout extends AuthEvent {
@@ -19,4 +20,12 @@ class AuthLogout extends AuthEvent {
 
 class AuthInit extends AuthEvent {
   const AuthInit();
+}
+
+class AuthConfirmPhome extends AuthEvent {
+  final String code;
+  const AuthConfirmPhome(this.code);
+
+  @override
+  List<Object?> get props => [code];
 }

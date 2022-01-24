@@ -5,6 +5,8 @@ import 'package:timetable/repositories/auth_repository/auth_repository.dart';
 import 'package:timetable/repositories/auth_repository/impl/firebase_auth_repository.dart';
 import 'package:timetable/repositories/timetable_repository/impl/firebase_timetable_repository.dart';
 import 'package:timetable/repositories/timetable_repository/timetable_repositoty.dart';
+import 'package:timetable/router/guards/check_if_authenticated.dart';
+import 'package:timetable/router/guards/check_if_not_authenticated.dart';
 import 'package:timetable/router/router.dart';
 import 'package:timetable/services/timetable_service/firebase_timetable_service.dart';
 
@@ -26,6 +28,11 @@ abstract class DI {
         .registerSingleton<TimetableRepository>(FirebaseTimetableRepository());
 
     // Router
-    locator.registerSingleton<AppRouter>(AppRouter());
+    locator.registerSingleton<AppRouter>(
+      AppRouter(
+        checkIfAuthenticatedGuard: CheckIfAuthenticated(),
+        checkIfNotAuthenticated: CheckIfNotAuthenticated(),
+      ),
+    );
   }
 }

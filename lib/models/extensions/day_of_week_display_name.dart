@@ -9,5 +9,16 @@ extension DayOfWeekDisplayName on int {
         'Воскресенье',
       ];
 
+  List<String> get _shortNames => [
+        'Вс',
+        'Пн',
+        'Вт',
+        'Ср',
+        'Чт',
+        'Пт',
+        'Сб',
+      ];
+
   String get displayName => _names[this];
+  String get shortName => _shortNames[this];
 }
