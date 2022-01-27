@@ -10,12 +10,14 @@ class LoginLayout extends StatelessWidget {
     required this.nextButtonLabel,
     required this.formChildren,
     required this.isWide,
+    required this.footer,
   }) : super(key: key);
 
   final VoidCallback onNextButtonPressed;
   final String nextButtonLabel;
   final bool isLoading;
   final bool isWide;
+  final Widget  footer;
 
   final List<Widget> formChildren;
 
@@ -43,7 +45,9 @@ class LoginLayout extends StatelessWidget {
             label: nextButtonLabel,
           ),
           const SizedBox(height: AppMargins.largeMargin),
-          if (isLoading) const Center(child: CircularProgressIndicator())
+          if (isLoading) const Center(child: CircularProgressIndicator()),
+          const SizedBox(height: AppMargins.largeMargin,),
+          footer,
         ],
       ),
     );

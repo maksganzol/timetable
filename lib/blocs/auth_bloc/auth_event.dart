@@ -6,13 +6,18 @@ abstract class AuthEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class AuthLogin extends AuthEvent {
+class AuthLoginWithPhone extends AuthEvent {
   final String phone;
-  const AuthLogin(this.phone);
+  const AuthLoginWithPhone(this.phone);
 
   @override
   List<Object?> get props => [phone];
 }
+
+class AuthLoginWithGoogle extends AuthEvent {
+  const AuthLoginWithGoogle();
+}
+
 
 class AuthLogout extends AuthEvent {
   const AuthLogout();

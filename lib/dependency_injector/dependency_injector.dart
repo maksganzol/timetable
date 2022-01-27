@@ -12,7 +12,7 @@ import 'package:timetable/services/timetable_service/firebase_timetable_service.
 
 abstract class DI {
   static GetIt locator = GetIt.instance;
-  static inject() {
+  static void inject() {
     // API
     locator.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
     locator.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);

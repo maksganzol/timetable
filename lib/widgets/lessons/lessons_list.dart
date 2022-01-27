@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:timetable/configuration/app_margings.dart';
 import 'package:timetable/models/extensions/day_of_week_display_name.dart';
@@ -34,7 +33,6 @@ class LessonsList extends StatelessWidget {
                 left: AppMargins.margin / 2,
                 top: AppMargins.margin,
               ),
-              color: Colors.white,
               child: Text(
                 dayOfWeek.displayName,
                 style: const TextStyle(color: CupertinoColors.label),

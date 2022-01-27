@@ -7,7 +7,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository = DI.locator<AuthRepository>();
 
   AuthBloc() : super(const AuthState.unauthorized()) {
-    on<AuthLogin>(_handleLogin);
+    on<AuthLoginWithPhone>(_handleLoginWithPhone);
+    on<AuthLoginWithGoogle>(_handleLoginWithGoogle);
     on<AuthConfirmPhome>(_handleConfirmPhone);
     on<AuthLogout>(_handleLogout);
     on<AuthInit>(_handleInit);
@@ -15,11 +16,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     add(const AuthInit());
   }
 
-  Future<void> _handleLogin(AuthLogin event, Emitter emit) async {
+  Future<void> _handleLoginWithPhone(
+    AuthLoginWithPhone event,
+    Emitter emit,
+  ) async {
     final authConfirmationResult =
         await _authRepository.signInWithPhone(phoneNumber: event.phone);
 
     emit(state.copyWith.authConfirmationResult(authConfirmationResult));
+  }
+
+  Future<void> _handleLoginWithGoogle(
+    AuthLoginWithGoogle event,
+    Emitter emit,
+  ) async {
+    final user = await _authRepository.signInAnonymously();
+
+    emit(state.copyWith.user(user));
   }
 
   Future<void> _handleLogout(AuthLogout event, Emitter emit) async {

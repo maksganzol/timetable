@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:timetable/blocs/auth_bloc/auth_bloc.dart';
 import 'package:timetable/configuration/app_margings.dart';
@@ -69,6 +71,7 @@ class _SigninPageState extends State<SigninPage> {
     return Scaffold(
       body: LoginLayout(
         formChildren: _formChildren,
+        footer: _footer,
         isLoading: _isLoading,
         nextButtonLabel: _buttonText,
         onNextButtonPressed: _handleNextStep,
@@ -127,7 +130,7 @@ class _SigninPageState extends State<SigninPage> {
       case SignInState.code:
         return AuthConfirmPhome(_verificationCode);
       case SignInState.phone:
-        return AuthLogin(_fullPhoneNumber);
+        return AuthLoginWithPhone(_fullPhoneNumber);
     }
   }
 
@@ -137,6 +140,23 @@ class _SigninPageState extends State<SigninPage> {
         return (state) => state.isAuthenticated;
       case SignInState.phone:
         return (state) => state.authConfirmationResult != null;
+    }
+  }
+
+  Widget get _footer {
+    switch (_signInState) {
+      case SignInState.code:
+        return Container();
+      case SignInState.phone:
+        return SignInButton(
+          Buttons.Google,
+          onPressed: () async {
+            final authBloc = context.read<AuthBloc>()
+              ..add(const AuthLoginWithGoogle());
+            await authBloc.waitFor((state) => state.isAuthenticated);
+            context.router.push(const HomeRoute());
+          },
+        );
     }
   }
 }

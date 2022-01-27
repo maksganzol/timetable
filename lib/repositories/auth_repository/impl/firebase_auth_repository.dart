@@ -29,6 +29,7 @@ class FirebaseAuthRepository extends AuthRepository {
   Future<AuthConfirmationResult> signInWithPhone({
     required String phoneNumber,
   }) async {
+    //TODO: Handle Error
     final completer = Completer<AuthConfirmationResult>();
     await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -37,10 +38,13 @@ class FirebaseAuthRepository extends AuthRepository {
       ),
       verificationCompleted: (_) {},
       verificationFailed: (error) {
-        print('AAAAAAAAAA $error');
+        print('Error $error');
       },
       codeAutoRetrievalTimeout: (_) {},
     );
     return completer.future;
   }
+
+
+  
 }
