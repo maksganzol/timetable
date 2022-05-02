@@ -3,16 +3,16 @@ import 'package:timetable/dependency_injector/dependency_injector.dart';
 import 'package:timetable/models/extensions/firestore_serializable.dart';
 import 'package:timetable/models/lesson.dart';
 import 'package:timetable/models/timetable.dart';
+import 'package:timetable/services/firebase_firestore_service.dart';
 import 'package:timetable/utils/type_defs/json.dart';
 
-class FirebaseTimetableService {
-  final FirebaseFirestore _firebaseFirestore = DI.locator<FirebaseFirestore>();
+class FirebaseTimetableService extends FirebaseFirestoreService{
 
   static const _timetableCollectionName = 'timetables';
   static const _lessonsCollectionName = 'lessons';
 
   CollectionReference<Json> get _collection =>
-      _firebaseFirestore.collection(_timetableCollectionName);
+      firebaseFirestore.collection(_timetableCollectionName);
 
   Future<List<Timetable>> fetchTimetableCollection() async {
     final querySnapshot = await _collection.get();
@@ -20,7 +20,7 @@ class FirebaseTimetableService {
   }
 
   Future<Timetable?> fetchTimetableById({required String id}) async {
-    final documentSnapshot = await _firebaseFirestore
+    final documentSnapshot = await firebaseFirestore
         .collection(_timetableCollectionName)
         .doc(id)
         .get();

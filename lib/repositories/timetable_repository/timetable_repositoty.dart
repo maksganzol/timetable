@@ -6,4 +6,5 @@ abstract class TimetableRepository {
   Future<List<Timetable>> retrieveAllTimetables();
   Future<TimetableDetails?> loadTimetableDetails({required String id});
   Future<void> addLesson(AddLessonRequest addLessonRequest);
+  Future<List<Timetable>> timetablesForIdsList(List<String> ids);
 }

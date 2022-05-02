@@ -23,6 +23,7 @@ abstract class AppColors {
   static const Color indigo050 = Color(0xfff2e7fe);
 
   static const Color indigoBackground = Color(0xfffcf8ff);
+  static const Color greyBackground = Color(0xffF7F7F7);
 }
 
 extension ColorMaterialStateProperty on Color {

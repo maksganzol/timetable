@@ -5,10 +5,13 @@ import 'package:timetable/repositories/auth_repository/auth_repository.dart';
 import 'package:timetable/repositories/auth_repository/impl/firebase_auth_repository.dart';
 import 'package:timetable/repositories/timetable_repository/impl/firebase_timetable_repository.dart';
 import 'package:timetable/repositories/timetable_repository/timetable_repositoty.dart';
+import 'package:timetable/repositories/user_profile_repository/impl/firebase_user_profile_repository.dart';
+import 'package:timetable/repositories/user_profile_repository/user_profile_repository.dart';
 import 'package:timetable/router/guards/check_if_authenticated.dart';
 import 'package:timetable/router/guards/check_if_not_authenticated.dart';
 import 'package:timetable/router/router.dart';
 import 'package:timetable/services/timetable_service/firebase_timetable_service.dart';
+import 'package:timetable/services/user_profile_service/firebase_user_profile_service.dart';
 
 abstract class DI {
   static GetIt locator = GetIt.instance;
@@ -21,11 +24,18 @@ abstract class DI {
     locator.registerSingleton<FirebaseTimetableService>(
       FirebaseTimetableService(),
     );
+    locator.registerSingleton<FirebaseUserProfileService>(
+      FirebaseUserProfileService(),
+    );
 
     // Repositories
     locator.registerSingleton<AuthRepository>(FirebaseAuthRepository());
-    locator
-        .registerSingleton<TimetableRepository>(FirebaseTimetableRepository());
+    locator.registerSingleton<TimetableRepository>(
+      FirebaseTimetableRepository(),
+    );
+    locator.registerSingleton<UserProfileRepository>(
+      FirebaseUserProfileRepository(),
+    );
 
     // Router
     locator.registerSingleton<AppRouter>(

@@ -30,11 +30,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.indigoBackground,
+      backgroundColor: AppColors.greyBackground,
       body: NestedScrollView(
         headerSliverBuilder: (context, _) => [
           CupertinoSliverNavigationBar(
-            backgroundColor: AppColors.indigoBackground,
+            backgroundColor: AppColors.greyBackground,
             automaticallyImplyLeading: false,
             border: const Border(),
             largeTitle: const Text(

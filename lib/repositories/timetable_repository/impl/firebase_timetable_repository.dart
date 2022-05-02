@@ -9,12 +9,17 @@ class FirebaseTimetableRepository extends TimetableRepository {
   final FirebaseTimetableService _timetableService =
       DI.locator<FirebaseTimetableService>();
 
-  FirebaseTimetableRepository();
-
   @override
   Future<List<Timetable>> retrieveAllTimetables() async {
     final timetables = await _timetableService.fetchTimetableCollection();
     return timetables;
+  }
+
+
+  @override
+  Future<List<Timetable>> timetablesForIdsList(List<String> ids) async {
+    final timetables = await _timetableService.fetchTimetableCollection();
+    return timetables.where((timetable) => ids.any((id) => timetable.id == id)).toList(growable: false);
   }
 
   @override
