@@ -4,14 +4,16 @@ extension DateTimeOperators on DateTime {
   bool operator <(LessonSchedule lessonTime) {
     return weekday - 1 < lessonTime.dayOfWeek ||
         (weekday - 1 == lessonTime.dayOfWeek &&
-            hour <= lessonTime.startTime.hour &&
-            minute < lessonTime.startTime.minute);
+            (hour < lessonTime.startTime.hour ||
+                hour == lessonTime.startTime.hour &&
+                    minute < lessonTime.startTime.minute));
   }
 
   bool operator >(LessonSchedule lessonTime) {
     return weekday - 1 > lessonTime.dayOfWeek ||
         (weekday - 1 == lessonTime.dayOfWeek &&
-            hour >= lessonTime.endTime.hour &&
-            minute > lessonTime.endTime.minute);
+            (hour > lessonTime.endTime.hour ||
+                hour == lessonTime.endTime.hour &&
+                    minute > lessonTime.endTime.minute));
   }
 }

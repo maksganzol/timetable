@@ -14,10 +14,25 @@ class FirebaseUserProfileRepository extends UserProfileRepository {
   @override
   Future<UserProfile> getUserProfile() async {
     final userId = _firebaseAuth.currentUser?.uid;
-    
+
     final userProfile =
         await userId?.app(_userProfileService.getUserProfileForId);
 
     return userProfile ?? const UserProfile.empty();
+  }
+
+  @override
+  Future<void> addTimetableByCode(String code) async {
+    //In future cod may be not equal to id
+    final userId = _firebaseAuth.currentUser?.uid;
+    if (userId == null) return;
+    await _userProfileService.addTimetableToUserById(userId, code);
+  }
+
+  @override
+  Future<void> removeTimetable(String timetableId) async {
+    final userId = _firebaseAuth.currentUser?.uid;
+    if (userId == null) return;
+    await _userProfileService.removeTimetableFromUserById(userId, timetableId);
   }
 }

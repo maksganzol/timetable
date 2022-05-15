@@ -5,6 +5,7 @@ import 'package:timetable/configuration/app_margings.dart';
 import 'package:timetable/models/extensions/day_of_week_display_name.dart';
 import 'package:timetable/models/lesson.dart';
 import 'package:timetable/models/lesson_status.dart';
+import 'package:timetable/utils/extensions/time_of_day_compare_to.dart';
 import 'package:timetable/widgets/lessons/lesson_tile.dart';
 
 class LessonsList extends StatelessWidget {
@@ -25,7 +26,7 @@ class LessonsList extends StatelessWidget {
         (dayIndex, dayOfWeek) {
           final lessonsForDate = lessons
               .where((lesson) => lesson.time.dayOfWeek == dayOfWeek)
-              .toList(growable: false);
+              .toList(growable: false)..sort((l1, l2) => l1.time.startTime.compareTo(l2.time.startTime));
 
           return SliverStickyHeader(
             header: Container(

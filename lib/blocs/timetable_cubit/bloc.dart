@@ -1,26 +1,27 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:timetable/blocs/timetable_bloc/timetable_bloc.dart';
+import 'package:timetable/blocs/timetable_cubit/timetable_cubit.dart';
 import 'package:timetable/dependency_injector/dependency_injector.dart';
 import 'package:timetable/repositories/timetable_repository/timetable_repositoty.dart';
 import 'package:timetable/repositories/user_profile_repository/user_profile_repository.dart';
 
-class TimetableBloc extends Bloc<TimetableEvent, TimetableState> {
+class TimetableCubit extends Cubit<TimetableState> {
   final TimetableRepository _timetableRepository =
       DI.locator<TimetableRepository>();
     
   final UserProfileRepository _userProfileRepository = DI.locator<UserProfileRepository>();
 
-  TimetableBloc() : super(const TimetableState.initial()) {
-    on<TimetableLoad>(_handleLoad);
-  }
+  TimetableCubit() : super(const TimetableState.initial());
 
-  Future<void> _handleLoad(
-    TimetableLoad event,
-    Emitter<TimetableState> emitter,
+  Future<void> load(
   ) async {
     final userProfile = await _userProfileRepository.getUserProfile();
     final timetables = await _timetableRepository.timetablesForIdsList(userProfile.timetables);
     
-    emitter(TimetableState(timetables: timetables));
+    emit(TimetableState(timetables: timetables));
+  }
+
+  Future<void> removeTimetable(String id) async {
+    await _userProfileRepository.removeTimetable(id);
+    await load();
   }
 }

@@ -17,7 +17,7 @@ class Lesson extends Equatable {
   // final String? subject;
 
   LessonStatus get status {
-    final now = DateTime.now().toLocal();
+    final now = DateTime.now();
 
     if (now < time) {
       return LessonStatus.notStarted;

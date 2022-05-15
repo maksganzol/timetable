@@ -45,4 +45,6 @@ class FirebaseTimetableService extends FirebaseFirestoreService{
         .collection(_lessonsCollectionName)
         .add(lessonData);
   }
+
+  
 }

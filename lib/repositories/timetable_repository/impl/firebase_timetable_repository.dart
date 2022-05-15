@@ -4,6 +4,7 @@ import 'package:timetable/models/timetable.dart';
 import 'package:timetable/models/timetable_details.dart';
 import 'package:timetable/repositories/timetable_repository/timetable_repositoty.dart';
 import 'package:timetable/services/timetable_service/firebase_timetable_service.dart';
+import 'package:timetable/services/user_profile_service/firebase_user_profile_service.dart';
 
 class FirebaseTimetableRepository extends TimetableRepository {
   final FirebaseTimetableService _timetableService =
@@ -44,4 +45,5 @@ class FirebaseTimetableRepository extends TimetableRepository {
       addLessonRequest.toJson(),
     );
   }
+
 }
