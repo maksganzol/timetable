@@ -19,6 +19,6 @@ extension DayOfWeekDisplayName on int {
         'Сб',
       ];
 
-  String get displayName => _names[this];
-  String get shortName => _shortNames[this];
+  String get displayName => _names[this - 1];
+  String get shortName => _shortNames[this - 1];
 }

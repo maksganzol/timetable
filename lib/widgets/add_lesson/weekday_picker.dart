@@ -12,15 +12,23 @@ class WeekdayPicker extends StatelessWidget {
   final ValueChanged<int> onChanged;
   final int selectedDay;
 
-  List<int> get _days => List.generate(7, (i) => i);
+  static const _days = [7, 1, 2, 3, 4, 5, 6];
+  static const _daysX = [ 1, 2, 3, 4, 5, 6, 7];
+
 
   @override
   Widget build(BuildContext context) {
+    print(selectedDay);
+    final t = _days.map((day) => day == selectedDay).toList(growable: false);
+    print(_days);
+    print(t);
     return WeekdaySelector(
-      onChanged: (day) => onChanged(day - 1),
-      values:
-          _days.map((day) => day == selectedDay + 1).toList(growable: false),
-      shortWeekdays: _days.map((day) => day.shortName).toList(growable: false),
+      onChanged: (day) {
+        print('DAY $day');
+        onChanged(day);
+      },
+      values: t,
+      shortWeekdays:_daysX.map((day) => day.shortName).toList(growable: false),
     );
   }
 }

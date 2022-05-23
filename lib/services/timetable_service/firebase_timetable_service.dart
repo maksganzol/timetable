@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timetable/dependency_injector/dependency_injector.dart';
+import 'package:timetable/models/add_timetable_request.dart';
 import 'package:timetable/models/extensions/firestore_serializable.dart';
 import 'package:timetable/models/lesson.dart';
 import 'package:timetable/models/timetable.dart';
 import 'package:timetable/services/firebase_firestore_service.dart';
 import 'package:timetable/utils/type_defs/json.dart';
 
-class FirebaseTimetableService extends FirebaseFirestoreService{
-
+class FirebaseTimetableService extends FirebaseFirestoreService {
   static const _timetableCollectionName = 'timetables';
   static const _lessonsCollectionName = 'lessons';
 
@@ -46,5 +46,11 @@ class FirebaseTimetableService extends FirebaseFirestoreService{
         .add(lessonData);
   }
 
-  
+  Future<String> addNewTimetable(
+    AddTimetableRequest addTimetableRequest,
+  ) async {
+    final document = await _collection.add(addTimetableRequest.toJson());
+// await document.collection(_lessonsCollectionName);
+    return document.id;
+  }
 }

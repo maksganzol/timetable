@@ -53,7 +53,7 @@ class LessonScheduleFiled extends StatelessWidget {
     final lessonSchedule = LessonSchedule(
       startTime: startTime,
       endTime: endTime,
-      dayOfWeek: DateTime.now().weekday - 1,
+      dayOfWeek: DateTime.now().weekday,
       isOddWeek: false,
     );
 

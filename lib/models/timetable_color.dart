@@ -7,7 +7,6 @@ enum TimetableColor {
   indigo,
   blue,
   pink,
-  white,
 }
 
 extension TimetableMaterialColor on TimetableColor {
@@ -25,8 +24,6 @@ extension TimetableMaterialColor on TimetableColor {
         return Colors.pink;
       case TimetableColor.yellow:
         return Colors.yellow;
-      case TimetableColor.white:
-        return Colors.white;
     }
   }
 }

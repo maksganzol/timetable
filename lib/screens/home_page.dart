@@ -11,6 +11,7 @@ import 'package:timetable/configuration/configuration.dart';
 import 'package:timetable/models/timetable.dart';
 import 'package:timetable/models/timetable_color.dart';
 import 'package:timetable/router/router.dart';
+import 'package:timetable/widgets/empty_list.dart';
 import 'package:timetable/widgets/timetables/timetable_tile.dart';
 import 'package:timetable/utils/extensions/extensions.dart';
 import 'package:timetable/screens/add_timetable/add_timetable_page.dart';
@@ -78,6 +79,12 @@ class _TimetableList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (timetables.isEmpty) {
+      return const EmptyListLabel(
+        title: 'У вас пока нет расписаний 👀',
+        subtitle: 'Добавьте существующее расписание, или создайте новое!😎',
+      );
+    }
     return ListView(
       children: timetables
           .map(
@@ -101,20 +108,20 @@ class _AddTimetableFloatingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey[400]!,
-                blurRadius: 5.0,
-              ),
-            ],
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey[400]!,
+            blurRadius: 5.0,
           ),
-          child: IconButton(
-            icon: const Icon(CupertinoIcons.add),
-            onPressed: () => AddTimetablePage.show(context),
-          ),
-        );
+        ],
+      ),
+      child: IconButton(
+        icon: const Icon(CupertinoIcons.add),
+        onPressed: () => AddTimetablePage.show(context),
+      ),
+    );
   }
 }

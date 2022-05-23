@@ -3,9 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:timetable/blocs/add_lesson_bloc/add_lesson_bloc.dart';
+import 'package:timetable/blocs/add_lesson_cubit/add_lesson_cubit.dart';
 import 'package:timetable/blocs/timetable_details_bloc/timetable_details_bloc.dart';
-import 'package:timetable/configuration/app_colors.dart';
 import 'package:timetable/configuration/app_margings.dart';
 import 'package:timetable/models/lesson_schedule.dart';
 
@@ -63,7 +62,7 @@ class _AddLessonButton extends StatelessWidget {
       onTap: () => AutoRouter.of(context).pop(),
       child: GestureDetector(
         onTap: () => _handleAddLesson(context),
-        child: BlocBuilder<AddLessonBloc, AddLessonState>(
+        child: BlocBuilder<AddLessonCubit, AddLessonState>(
           builder: (context, state) => Text(
             'Готово',
             style: TextStyle(
@@ -77,14 +76,14 @@ class _AddLessonButton extends StatelessWidget {
     );
   }
 
-  void _handleAddLesson(BuildContext context) {
+  void _handleAddLesson(BuildContext context) async {
     final timetableDetailsBloc = context.read<TimetableDetailsBloc>();
-    final addLessonBloc = context.read<AddLessonBloc>();
+    final addLessonBloc = context.read<AddLessonCubit>();
     final timetableId = timetableDetailsBloc.state.timetableDetails?.id;
 
     if (timetableId == null) return;
 
-    addLessonBloc.add(AddLessonSubmit(timetableId: timetableId));
+    await addLessonBloc.submitLesson(timetableId);
     timetableDetailsBloc.add(TimetableDetailsLoad(timetableId: timetableId));
 
     AutoRouter.of(context).pop();
@@ -98,9 +97,8 @@ class _DescriptionField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputWrapper(
       child: TextInputField(
-        onChanged: (description) => context
-            .read<AddLessonBloc>()
-            .add(AddLessonDescription(description)),
+        onChanged: (description) =>
+            context.read<AddLessonCubit>().addLessonDescriprion(description),
         hintText: 'Название или описание',
       ),
       label: 'Описание',
@@ -120,21 +118,19 @@ class _TeacherField extends StatelessWidget {
           TextInputField(
             hintText: 'Фамилия',
             onChanged: (surname) => context
-                .read<AddLessonBloc>()
-                .add(AddLessonTeacher(teacherSurname: surname)),
+                .read<AddLessonCubit>()
+                .addLessonTeacher(teacherSurname: surname),
           ),
           TextInputField(
-            hintText: 'Имя',
-            onChanged: (name) => context
-                .read<AddLessonBloc>()
-                .add(AddLessonTeacher(teacherName: name)),
-          ),
+              hintText: 'Имя',
+              onChanged: (name) => context
+                  .read<AddLessonCubit>()
+                  .addLessonTeacher(teacherName: name)),
           TextInputField(
-            hintText: 'Отчество',
-            onChanged: (patro) => context
-                .read<AddLessonBloc>()
-                .add(AddLessonTeacher(teacherParto: patro)),
-          ),
+              hintText: 'Отчество',
+              onChanged: (patro) => context
+                  .read<AddLessonCubit>()
+                  .addLessonTeacher(teacherParto: patro)),
         ]
             .map((input) => Expanded(child: input))
             .joinWith(const SizedBox(width: AppMargins.margin)),
@@ -149,22 +145,21 @@ class _LessonSchedulePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddLessonBloc, AddLessonState>(
+    return BlocBuilder<AddLessonCubit, AddLessonState>(
       builder: (context, state) {
         return Column(
           children: [
             LessonScheduleFiled(
               onChanged: (lessonSchedule) => context
-                  .read<AddLessonBloc>()
-                  .add(AddLessonSchedule(lessonSchedule)),
+                  .read<AddLessonCubit>()
+                  .addLessonSchedule(lessonSchedule),
               value: state.lessonSchedule,
             ),
             WeekdayPicker(
-              onChanged: (dayOfWeek) => context.read<AddLessonBloc>().add(
-                    AddLessonSchedule(
-                      state.lessonSchedule.copyWith.dayOfWeek(dayOfWeek),
-                    ),
-                  ),
+              onChanged: (dayOfWeek) =>
+                  context.read<AddLessonCubit>().addLessonSchedule(
+                        state.lessonSchedule.copyWith.dayOfWeek(dayOfWeek),
+                      ),
               selectedDay: state.lessonSchedule.dayOfWeek,
             ),
           ],

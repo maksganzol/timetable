@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timetable/blocs/timetable_details_bloc/timetable_details_bloc.dart';
 import 'package:timetable/models/timetable_view_mode.dart';
 import 'package:timetable/screens/add_lesson_page.dart';
+import 'package:timetable/widgets/empty_list.dart';
 import 'package:timetable/widgets/lessons/lessons_list.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -67,6 +68,15 @@ class _TimetablePageState extends State<TimetablePage> {
             final lessons = state.timetableDetails?.lessons;
             if (lessons == null) {
               return const Center(child: CircularProgressIndicator());
+            }
+            if (lessons.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: EmptyListLabel(
+                  title: 'Тут пока нет уроков.',
+                  subtitle: 'Добавьте первый урок в своё расписание.',
+                ),
+              );
             }
             return LessonsList(lessons: lessons);
           },

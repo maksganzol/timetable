@@ -8,11 +8,13 @@ class AddTimetableFormTemplate extends StatelessWidget {
     required this.controller,
     required this.onSubmit,
     required this.inputHintText,
+    this.child,
   }) : super(key: key);
 
   final TextEditingController controller;
   final VoidCallback onSubmit;
   final String inputHintText;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,10 @@ class AddTimetableFormTemplate extends StatelessWidget {
             decoration: InputDecoration(hintText: inputHintText),
             textAlign: TextAlign.center,
           ),
+          if (child != null) ...[
+            const SizedBox(height: 30),
+            child!,
+          ],
           const SizedBox(height: 30),
           ElevatedButton(
             style: ButtonStyle(
