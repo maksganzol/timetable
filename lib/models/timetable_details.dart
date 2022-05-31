@@ -10,6 +10,7 @@ part 'timetable_details.g.dart';
 class TimetableDetails extends Equatable {
   final String title;
   final String id;
+  final String authorId;
 
   final List<Lesson> lessons;
 
@@ -17,6 +18,7 @@ class TimetableDetails extends Equatable {
     required this.title,
     required this.id,
     required this.lessons,
+    required this.authorId,
   });
 
   factory TimetableDetails.fromJson(Json json) =>
@@ -30,11 +32,12 @@ class TimetableDetails extends Equatable {
       title: timetable.title,
       id: timetable.id,
       lessons: lessons,
+      authorId: timetable.authorId
     );
   }
 
   Json toJson() => _$TimetableDetailsToJson(this);
 
   @override
-  List<Object?> get props => [title, id, lessons];
+  List<Object?> get props => [title, id, lessons, authorId];
 }

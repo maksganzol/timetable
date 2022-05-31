@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:timetable/configuration/configuration.dart';
+import 'package:timetable/screens/share_timetable_screen.dart';
 
 class LessonTile extends StatelessWidget {
   final String title;
@@ -39,29 +41,48 @@ class LessonTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: isActive ? _activeDecoration : null,
-      padding: const EdgeInsets.all(AppMargins.margin),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Slidable(
+      key: ValueKey(title),
+      startActionPane: ActionPane(
+        extentRatio: 0.25,
         children: [
-          _LessonTimeLabel(time: startTime),
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: AppTexStyles.b600.copyWith(fontWeight: FontWeight.w600),
-              ),
-              Text(
-                subtitle,
-                style: AppTexStyles.b600,
-              ),
-            ],
+          _DismissibleAction(
+            icon: Icons.edit,
+            onPressed: () => {},
           ),
-          _LessonTimeLabel(time: endTime),
+          _DismissibleAction(
+            icon: Icons.delete,
+            onPressed: () => {},
+          )
         ],
+        motion: const ScrollMotion(),
+      ),
+      child: Container(
+        width: double.infinity,
+        decoration: isActive ? _activeDecoration : null,
+        padding: const EdgeInsets.all(AppMargins.margin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _LessonTimeLabel(time: startTime),
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style:
+                      AppTexStyles.b600.copyWith(fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  subtitle,
+                  style: AppTexStyles.b600,
+                ),
+              ],
+            ),
+            _LessonTimeLabel(time: endTime),
+          ],
+        ),
       ),
     );
   }
@@ -80,6 +101,25 @@ class _LessonTimeLabel extends StatelessWidget {
     return Text(
       time.format(context),
       style: AppTexStyles.b400.copyWith(color: Colors.black.withOpacity(0.5)),
+    );
+  }
+}
+
+class _DismissibleAction extends StatelessWidget {
+  const _DismissibleAction({
+    Key? key,
+    required this.icon,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(icon),
+      onPressed: onPressed,
     );
   }
 }

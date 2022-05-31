@@ -16,8 +16,8 @@ class App extends StatelessWidget {
         BlocProvider<AuthBloc>(create: (_) => AuthBloc()),
         BlocProvider<TimetableCubit>(create: (_) => TimetableCubit()),
         BlocProvider<AddLessonCubit>(create: (_) => AddLessonCubit()),
-        BlocProvider<TimetableDetailsBloc>(
-          create: (_) => TimetableDetailsBloc(),
+        BlocProvider<TimetableDetailsCubit>(
+          create: (_) => TimetableDetailsCubit(),
         ),
         BlocProvider<AddTimetableCubit>(create: (_) => AddTimetableCubit()),
 

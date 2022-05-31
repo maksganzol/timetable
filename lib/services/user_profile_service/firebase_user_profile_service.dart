@@ -21,9 +21,14 @@ class FirebaseUserProfileService extends FirebaseFirestoreService {
     });
   }
 
-   Future<void> removeTimetableFromUserById(String userId, String timetableId) async {
+  Future<void> removeTimetableFromUserById(
+      String userId, String timetableId) async {
     await _collection.doc(userId).update({
       'timetables': FieldValue.arrayRemove([timetableId])
     });
+  }
+
+  Future<void> addUserProfile(String id) async {
+    await _collection.doc(id).set(const UserProfile.empty().toJson());
   }
 }

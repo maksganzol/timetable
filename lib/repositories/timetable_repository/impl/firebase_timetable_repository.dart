@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:timetable/dependency_injector/dependency_injector.dart';
 import 'package:timetable/models/add_lesson_request.dart';
 import 'package:timetable/models/add_timetable_request.dart';
@@ -11,17 +12,20 @@ class FirebaseTimetableRepository extends TimetableRepository {
   final FirebaseTimetableService _timetableService =
       DI.locator<FirebaseTimetableService>();
 
+  final FirebaseAuth _firebaseAuth = DI.locator<FirebaseAuth>();
+
   @override
   Future<List<Timetable>> retrieveAllTimetables() async {
     final timetables = await _timetableService.fetchTimetableCollection();
     return timetables;
   }
 
-
   @override
   Future<List<Timetable>> timetablesForIdsList(List<String> ids) async {
     final timetables = await _timetableService.fetchTimetableCollection();
-    return timetables.where((timetable) => ids.any((id) => timetable.id == id)).toList(growable: false);
+    return timetables
+        .where((timetable) => ids.any((id) => timetable.id == id))
+        .toList(growable: false);
   }
 
   @override
@@ -49,8 +53,21 @@ class FirebaseTimetableRepository extends TimetableRepository {
 
   @override
   Future<String> addNewTimetable(String name, TimetableColor color) async {
-   final newTimetableId = await _timetableService.addNewTimetable(AddTimetableRequest(color: color, title: name));
-  return newTimetableId;
+    final newTimetableId = await _timetableService.addNewTimetable(
+      AddTimetableRequest(
+        color: color,
+        title: name,
+        authorId: _firebaseAuth.currentUser!.uid,
+      ),
+    );
+    return newTimetableId;
   }
 
+  @override
+  Future<String> createCopy(String timetableId) async {
+    return await _timetableService.createCopyForUser(
+      _firebaseAuth.currentUser!.uid,
+      timetableId,
+    );
+  }
 }

@@ -9,6 +9,6 @@ abstract class TimetableRepository {
   Future<void> addLesson(AddLessonRequest addLessonRequest);
   Future<List<Timetable>> timetablesForIdsList(List<String> ids);
   Future<String> addNewTimetable(String name, TimetableColor color);
-
+  Future<String> createCopy(String timetableId);
 
 }

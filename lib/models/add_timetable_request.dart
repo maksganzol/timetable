@@ -9,14 +9,16 @@ part 'add_timetable_request.g.dart';
 class AddTimetableRequest extends Equatable {
   final String title;
   final TimetableColor color;
+  final String authorId;
 
   const AddTimetableRequest({
     required this.title,
     required this.color,
+    required this.authorId,
   });
 
   @override
-  List<Object?> get props => [title, color];
+  List<Object?> get props => [title, color, authorId];
 
   Json toJson() => _$AddTimetableRequestToJson(this);
 }

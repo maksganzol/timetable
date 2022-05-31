@@ -15,7 +15,7 @@ class TimetableCubit extends Cubit<TimetableState> {
   Future<void> load(
   ) async {
     final userProfile = await _userProfileRepository.getUserProfile();
-    final timetables = await _timetableRepository.timetablesForIdsList(userProfile.timetables);
+    final timetables = await _timetableRepository.timetablesForIdsList(userProfile!.timetables);
     
     emit(TimetableState(timetables: timetables));
   }

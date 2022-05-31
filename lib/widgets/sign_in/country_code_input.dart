@@ -29,24 +29,6 @@ class _CountryCodeInputState extends State<CountryCodeInput> {
     initCountries();
   }
 
-  Future<void> initCountries() async {
-    final jsonString =
-        await rootBundle.loadString('assets/json/country_codes.json');
-    final countiesJson = List<Json>.from(json.decode(jsonString));
-
-    final loadedCountries =
-        countiesJson.map(Country.fromJson).toList(growable: false);
-
-    setState(() {
-      _countries = loadedCountries;
-      _selectedCountry = loadedCountries.ukraine;
-    });
-
-    WidgetsBinding.instance?.addPostFrameCallback(
-      (_) => widget.onCountryChanged(loadedCountries.ukraine),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -79,6 +61,25 @@ class _CountryCodeInputState extends State<CountryCodeInput> {
       ),
     );
   }
+
+  Future<void> initCountries() async {
+    final jsonString =
+        await rootBundle.loadString('assets/json/country_codes.json');
+    final countiesJson = List<Json>.from(json.decode(jsonString));
+
+    final loadedCountries =
+        countiesJson.map(Country.fromJson).toList(growable: false);
+
+    setState(() {
+      _countries = loadedCountries;
+      _selectedCountry = loadedCountries.ukraine;
+    });
+
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (_) => widget.onCountryChanged(loadedCountries.ukraine),
+    );
+  }
+
 }
 
 class _CountriesDialog extends StatelessWidget {

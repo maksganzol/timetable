@@ -10,15 +10,17 @@ class Timetable extends Equatable {
   final String id;
   final String title;
   final TimetableColor color;
+  final String authorId;
 
   const Timetable({
     required this.id,
     required this.title,
     required this.color,
+    required this.authorId,
   });
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [id, title, color, authorId];
 
   factory Timetable.fromJson(Json json) => _$TimetableFromJson(json);
 

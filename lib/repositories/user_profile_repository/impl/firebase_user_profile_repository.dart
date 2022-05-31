@@ -12,13 +12,13 @@ class FirebaseUserProfileRepository extends UserProfileRepository {
       DI.locator<FirebaseUserProfileService>();
 
   @override
-  Future<UserProfile> getUserProfile() async {
+  Future<UserProfile?> getUserProfile() async {
     final userId = _firebaseAuth.currentUser?.uid;
 
     final userProfile =
         await userId?.app(_userProfileService.getUserProfileForId);
 
-    return userProfile ?? const UserProfile.empty();
+    return userProfile;
   }
 
   @override
@@ -34,5 +34,10 @@ class FirebaseUserProfileRepository extends UserProfileRepository {
     final userId = _firebaseAuth.currentUser?.uid;
     if (userId == null) return;
     await _userProfileService.removeTimetableFromUserById(userId, timetableId);
+  }
+
+  @override
+  Future<void> addUserProfile() async {
+    await _userProfileService.addUserProfile(_firebaseAuth.currentUser!.uid);
   }
 }

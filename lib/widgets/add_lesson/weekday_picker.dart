@@ -16,7 +16,7 @@ class WeekdayPicker extends StatelessWidget {
   static const _daysX = [ 1, 2, 3, 4, 5, 6, 7];
 
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     print(selectedDay);
     final t = _days.map((day) => day == selectedDay).toList(growable: false);

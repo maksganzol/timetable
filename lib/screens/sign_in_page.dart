@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/button_list.dart';
@@ -69,9 +70,10 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CupertinoNavigationBar(middle: Text('Вход')),
       body: LoginLayout(
         formChildren: _formChildren,
-        footer: _footer,
+        footer: const SizedBox(),
         isLoading: _isLoading,
         nextButtonLabel: _buttonText,
         onNextButtonPressed: _handleNextStep,

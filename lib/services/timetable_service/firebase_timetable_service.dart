@@ -20,12 +20,12 @@ class FirebaseTimetableService extends FirebaseFirestoreService {
   }
 
   Future<Timetable?> fetchTimetableById({required String id}) async {
-    final documentSnapshot = await firebaseFirestore
-        .collection(_timetableCollectionName)
-        .doc(id)
-        .get();
+    final documentReference =
+        firebaseFirestore.collection(_timetableCollectionName).doc(id);
 
-    return documentSnapshot.toModel(Timetable.fromJson);
+    final document = await documentReference.get();
+
+    return document.toModel(Timetable.fromJson);
   }
 
   Future<List<Lesson>> fetchLessonsForTimetable({
@@ -50,7 +50,21 @@ class FirebaseTimetableService extends FirebaseFirestoreService {
     AddTimetableRequest addTimetableRequest,
   ) async {
     final document = await _collection.add(addTimetableRequest.toJson());
-// await document.collection(_lessonsCollectionName);
     return document.id;
+  }
+
+  Future<String> createCopyForUser(String userId, String timetableId) async {
+    final document = await _collection.doc(timetableId).get();
+    final lessonsDocs = await _collection
+        .doc(timetableId)
+        .collection(_lessonsCollectionName)
+        .get();
+    final documentReference =
+        await _collection.add(document.data()!..['authorId'] = userId);
+    await Future.wait(lessonsDocs.docs.map((doc) => _collection
+        .doc(documentReference.id)
+        .collection(_lessonsCollectionName)
+        .add(doc.data())));
+    return documentReference.id;
   }
 }

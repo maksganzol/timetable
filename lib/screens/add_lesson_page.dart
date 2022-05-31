@@ -31,7 +31,7 @@ class AddLessonPage extends StatefulWidget {
 class _AddLessonPageState extends State<AddLessonPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TimetableDetailsBloc, TimetableDetailsState>(
+    return BlocBuilder<TimetableDetailsCubit, TimetableDetailsState>(
       builder: (context, state) => Scaffold(
         appBar: CupertinoNavigationBar(
           previousPageTitle: state.timetableDetails?.title ?? '...',
@@ -77,14 +77,14 @@ class _AddLessonButton extends StatelessWidget {
   }
 
   void _handleAddLesson(BuildContext context) async {
-    final timetableDetailsBloc = context.read<TimetableDetailsBloc>();
+    final timetableDetailsBloc = context.read<TimetableDetailsCubit>();
     final addLessonBloc = context.read<AddLessonCubit>();
     final timetableId = timetableDetailsBloc.state.timetableDetails?.id;
 
     if (timetableId == null) return;
 
     await addLessonBloc.submitLesson(timetableId);
-    timetableDetailsBloc.add(TimetableDetailsLoad(timetableId: timetableId));
+    timetableDetailsBloc.load(timetableId);
 
     AutoRouter.of(context).pop();
   }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:timetable/configuration/app_colors.dart';
-import 'package:timetable/configuration/app_margings.dart';
 import 'package:timetable/configuration/configuration.dart';
 
 class SubmitButton extends StatelessWidget {

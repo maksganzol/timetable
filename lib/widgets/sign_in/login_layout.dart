@@ -17,23 +17,14 @@ class LoginLayout extends StatelessWidget {
   final String nextButtonLabel;
   final bool isLoading;
   final bool isWide;
-  final Widget  footer;
+  final Widget footer;
 
   final List<Widget> formChildren;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.indigo050,
-            AppColors.indigo200,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      color: AppColors.greyBackground,
       padding: EdgeInsets.symmetric(horizontal: formPadding(context)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

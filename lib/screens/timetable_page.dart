@@ -2,7 +2,9 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:timetable/blocs/timetable_cubit/timetable_cubit.dart';
 import 'package:timetable/blocs/timetable_details_bloc/timetable_details_bloc.dart';
+import 'package:timetable/configuration/configuration.dart';
 import 'package:timetable/models/timetable_view_mode.dart';
 import 'package:timetable/screens/add_lesson_page.dart';
 import 'package:timetable/widgets/empty_list.dart';
@@ -26,9 +28,7 @@ class _TimetablePageState extends State<TimetablePage> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<TimetableDetailsBloc>()
-        .add(TimetableDetailsLoad(timetableId: widget.timetableId));
+    context.read<TimetableDetailsCubit>().load(widget.timetableId);
   }
 
   @override
@@ -43,10 +43,24 @@ class _TimetablePageState extends State<TimetablePage> {
               icon: viewMode.icon,
             ),
           ),
-          middle: BlocBuilder<TimetableDetailsBloc, TimetableDetailsState>(
+          middle: BlocBuilder<TimetableDetailsCubit, TimetableDetailsState>(
             builder: (context, state) {
               final title = state.timetableDetails?.title ?? '...';
-              return Text(title, style: const TextStyle(fontSize: 20));
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(title, style: const TextStyle(fontSize: 20)),
+                  if (state.isLocked)
+                    Material(
+                      child: IconButton(
+                        iconSize: 20,
+                        color: CupertinoColors.systemGrey,
+                        icon: const Icon(Icons.lock),
+                        onPressed: () => _unlockTimetable(context),
+                      ),
+                    ),
+                ],
+              );
             },
           ),
         ),
@@ -61,9 +75,13 @@ class _TimetablePageState extends State<TimetablePage> {
               ),
             ],
           ),
-          child: const _AddLessonFloatingButton(),
+          child: BlocBuilder<TimetableDetailsCubit, TimetableDetailsState>(
+            builder: (context, state) => _AddLessonFloatingButton(
+              isLocked: state.isLocked,
+            ),
+          ),
         ),
-        body: BlocBuilder<TimetableDetailsBloc, TimetableDetailsState>(
+        body: BlocBuilder<TimetableDetailsCubit, TimetableDetailsState>(
           builder: (context, state) {
             final lessons = state.timetableDetails?.lessons;
             if (lessons == null) {
@@ -87,7 +105,11 @@ class _TimetablePageState extends State<TimetablePage> {
 }
 
 class _AddLessonFloatingButton extends StatelessWidget {
-  const _AddLessonFloatingButton({Key? key}) : super(key: key);
+  const _AddLessonFloatingButton({
+    Key? key,
+    required this.isLocked,
+  }) : super(key: key);
+  final bool isLocked;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +117,42 @@ class _AddLessonFloatingButton extends StatelessWidget {
       splashColor: Colors.transparent,
       color: CupertinoColors.systemBlue,
       icon: const Icon(CupertinoIcons.add),
-      onPressed: () => AddLessonPage.show(context),
+      onPressed: () async {
+        final t = !isLocked || await _unlockTimetable(context);
+        if (t) await AddLessonPage.show(context);
+      },
     );
   }
+}
+
+Future<bool> _unlockTimetable(BuildContext context) async {
+  final result = await _showUnlcokDialog(context);
+  if (!result) return false;
+  await context.read<TimetableDetailsCubit>().createCopy();
+  await context.read<TimetableCubit>().load();
+  return true;
+}
+
+Future<bool> _showUnlcokDialog(BuildContext context) async {
+  final result = await showDialog<bool>(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: const Text('Это чужое расписание'),
+      content: const Text(
+          'Если вы хотите открыть его для редактирования, вам нужно создать копию.'),
+      actions: [
+        CupertinoDialogAction(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Отмена'),
+          isDefaultAction: true,
+        ),
+        CupertinoDialogAction(
+          isDestructiveAction: true,
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Создать копию'),
+        )
+      ],
+    ),
+  );
+  return result ?? false;
 }

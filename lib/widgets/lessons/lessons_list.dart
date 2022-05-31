@@ -16,8 +16,8 @@ class LessonsList extends StatelessWidget {
     required this.lessons,
   }) : super(key: key);
 
-  Set<int> get _daysOfWeek =>
-      lessons.map((lesson) => lesson.time.dayOfWeek).toSet();
+  Iterable<int> get _daysOfWeek =>
+      (lessons.map((lesson) => lesson.time.dayOfWeek).toList()..sort()).toSet();
 
   @override
   Widget build(BuildContext context) {
